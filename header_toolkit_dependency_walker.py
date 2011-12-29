@@ -41,9 +41,9 @@ if __name__ == '__main__':
   parser.add_option("--toolkit-pattern",
                     dest="toolkit_pattern", default='*.h',
                     help="Pattern used to match toolkit header file")
-  parser.add_option("--project-pattern", default='*.h',
-                    dest="project_pattern",
-                    help="Pattern used to match source file")
+  parser.add_option("--project-patterns", default='*.h *.cxx *.cpp',
+                    dest="project_patterns",
+                    help="patterns used to match source files. Example: \"*.h *.cxx *.cpp\"")
   parser.add_option("--verbose",
                     dest="verbose", action="store_true",
                     help="Print verbose information")
@@ -74,11 +74,15 @@ if __name__ == '__main__':
   
   expected_libraries = [];
   
-  project_files = recursively_list_file_within_directory(options.project_source_directory, options.project_pattern)
-  if options.verbose:
-    print "Found %s files walking [%s] using [%s] pattern" % (len(project_files), options.project_source_directory, options.project_pattern)
+  all_project_files = [];
+  project_patterns = options.project_patterns.split(" ");
+  for project_pattern in project_patterns:
+    project_files = recursively_list_file_within_directory(options.project_source_directory, project_pattern)
+    all_project_files.extend(project_files);
+    if options.verbose:
+      print "Found %s files walking [%s] using [%s] pattern" % (len(project_files), options.project_source_directory, project_pattern)
   
-  for filepath in project_files:
+  for filepath in all_project_files:
     project_headers = extract_headers_directly_included(filepath, options.toolkit_pattern)
     #print "Found %s header matching [%s] in file [%s]" % (len(project_headers), options.toolkit_pattern, filepath)
     for header in project_headers:
