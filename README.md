@@ -9,15 +9,49 @@ Think of HeaderToolkitDependencyWalker as an easy way to discover on which toolk
 Usage
 -----
 
-Quick example:
+Quick examples:
 
     $ cd ~/Projects/Slicer4/Libs/MRML/Core
     $ header_toolkit_dependency_walker.py --toolkit-source-directory=~/Projects/Slicer4-Superbuild-Debug/VTK
     Common
     Filtering
+    Graphics
+    Hybrid
     IO
+    Imaging
+    Rendering
 
 Simple.
+
+Note also that passing the `--extra-verbose` option will provide you with more details:
+
+    $ cd ~/Projects/Slicer4/Libs/MRML/Core
+    $ header_toolkit_dependency_walker.py --toolkit-source-directory=~/Projects/Slicer4-Superbuild-Debug/VTK --extra-verbose
+    3048 headers found in [/home/jchris/Projects/Slicer4-Superbuild-Debug/VTK] using [*.h]
+    2966 entries added to 'Header -> Library' map 
+    Found 98 files walking [.] using [*.h] pattern
+    Found 188 files walking [.] using [*.cxx] pattern
+    Found 0 files walking [.] using [*.cpp] pattern
+    -------------------------------------------------- -------------------------------------------------- --------------------
+    Project Header                                     Toolkit Header                                     Toolkit Library
+    -------------------------------------------------- -------------------------------------------------- --------------------
+    vtkImageAccumulateDiscrete.h                       vtkImageToImageFilter.h                            Filtering
+    vtkMRMLScene.h                                     vtkObject.h                                        Common
+    vtkCacheManager.h                                  vtkObject.h                                        Common
+    vtkMRMLFiducial.h                                  vtkObject.h                                        Common
+    [...]
+    vtkObserverManagerTest1.cxx                        vtkIntArray.h                                      Common
+    vtkMRMLTransformNodeTest1.cxx                      vtkGeneralTransform.h                              Common
+    --------------------
+    Toolkit Library
+    --------------------
+    Common
+    Filtering
+    Graphics
+    Hybrid
+    IO
+    Imaging
+    Rendering
 
 Installation
 ------------
