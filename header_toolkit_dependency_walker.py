@@ -1,15 +1,14 @@
 #!/usr/bin/python
 
-def extract_headers_directly_included(cpp_source_file, header_pattern):
+def extract_headers_directly_included(cpp_source_file):
   """Given a CPP source file, list all directly included headers matching the given pattern."""
-  import re, fnmatch
-  header_pattern_as_regex = fnmatch.translate(header_pattern).replace("\Z(?ms)", "")
+  import re
   matches = []
   lines = open(cpp_source_file, "r")
   for line in lines:
-    match = re.match("\#include\s+[\"<](" + header_pattern_as_regex + ")[\">]", line)
-    if match:
-      matches.append(match.group(1))
+    header = re.match("\#include\s+[\"<](.+)[\">]", line)
+    if header:
+      matches.append(header.group(1))
   return matches;
 
 def recursively_list_file_within_directory(directory, pattern):
@@ -83,8 +82,8 @@ if __name__ == '__main__':
       print "Found %s files walking [%s] using [%s] pattern" % (len(project_files), options.project_source_directory, project_pattern)
   
   for filepath in all_project_files:
-    project_headers = extract_headers_directly_included(filepath, options.toolkit_pattern)
-    #print "Found %s header matching [%s] in file [%s]" % (len(project_headers), options.toolkit_pattern, filepath)
+    project_headers = extract_headers_directly_included(filepath)
+    #print "Found %s headers in file [%s]" % (len(project_headers), filepath)
     for header in project_headers:
       if header in header_to_library_map:
         if options.extra_verbose:
