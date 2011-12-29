@@ -9,7 +9,7 @@ def extract_headers_directly_included(cpp_source_file):
     header = re.match("\#include\s+[\"<](.+)[\">]", line)
     if header:
       matches.append(header.group(1))
-  return matches;
+  return matches
 
 def recursively_list_file_within_directory(directory, pattern):
   """The returned list of file including the relative path to the provided directory."""
@@ -52,16 +52,16 @@ if __name__ == '__main__':
 
   (options, args) = parser.parse_args()
   
-  requiredArgumentErrorMessage = "argument '%s' is required !";
+  requiredArgumentErrorMessage = "argument '%s' is required !"
   if not options.toolkit_source_directory:
-    parser.error(requiredArgumentErrorMessage % '--toolkit-source-directory');
+    parser.error(requiredArgumentErrorMessage % '--toolkit-source-directory')
   
   if options.extra_verbose: 
     options.verbose = True
   
   import os.path
-  options.toolkit_source_directory = os.path.expanduser(options.toolkit_source_directory);
-  options.project_source_directory = os.path.expanduser(options.project_source_directory);
+  options.toolkit_source_directory = os.path.expanduser(options.toolkit_source_directory)
+  options.project_source_directory = os.path.expanduser(options.project_source_directory)
  
   toolkit_headers = recursively_list_file_within_directory(options.toolkit_source_directory, options.toolkit_pattern)
   if options.verbose:
@@ -71,13 +71,13 @@ if __name__ == '__main__':
   if options.verbose:
     print "%d entries added to 'Header -> Library' map " % (len(header_to_library_map.keys()))
   
-  expected_libraries = [];
+  expected_libraries = []
   
-  all_project_files = [];
-  project_patterns = options.project_patterns.split(" ");
+  all_project_files = []
+  project_patterns = options.project_patterns.split(" ")
   for project_pattern in project_patterns:
     project_files = recursively_list_file_within_directory(options.project_source_directory, project_pattern)
-    all_project_files.extend(project_files);
+    all_project_files.extend(project_files)
     if options.verbose:
       print "Found %s files walking [%s] using [%s] pattern" % (len(project_files), options.project_source_directory, project_pattern)
   
@@ -93,8 +93,4 @@ if __name__ == '__main__':
   expected_libraries = sorted(list(set(expected_libraries)))
   for lib in expected_libraries:
     print lib
-  
-  
-  
-
 
