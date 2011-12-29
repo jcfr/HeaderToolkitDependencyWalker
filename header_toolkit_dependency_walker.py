@@ -68,9 +68,9 @@ if __name__ == '__main__':
   if options.verbose:
     print "%d headers found in [%s] using [%s]" % (len(toolkit_headers), options.toolkit_source_directory, options.toolkit_pattern)
   
-  map_header_library = generate_map_of_header_to_subdirectory(toolkit_headers)
+  header_to_library_map = generate_map_of_header_to_subdirectory(toolkit_headers)
   if options.verbose:
-    print "%d entries added to 'Header -> Library' map " % (len(map_header_library.keys()))
+    print "%d entries added to 'Header -> Library' map " % (len(header_to_library_map.keys()))
   
   expected_libraries = [];
   
@@ -86,10 +86,10 @@ if __name__ == '__main__':
     project_headers = extract_headers_directly_included(filepath, options.toolkit_pattern)
     #print "Found %s header matching [%s] in file [%s]" % (len(project_headers), options.toolkit_pattern, filepath)
     for header in project_headers:
-      if header in map_header_library:
+      if header in header_to_library_map:
         if options.extra_verbose:
-          print "[%s] found in [%s]" % (header, map_header_library[header])
-        expected_libraries.append(map_header_library[header])
+          print "[%s] found in [%s]" % (header, header_to_library_map[header])
+        expected_libraries.append(header_to_library_map[header])
   
   expected_libraries = sorted(list(set(expected_libraries)))
   for lib in expected_libraries:
