@@ -81,15 +81,27 @@ if __name__ == '__main__':
     if options.verbose:
       print "Found %s files walking [%s] using [%s] pattern" % (len(project_files), options.project_source_directory, project_pattern)
   
+  column1_width = 50;
+  column2_width = 50;
+  column3_width = 20;
+  if options.extra_verbose:
+    print "%s %s %s"%('-' * column1_width, '-' * column2_width, '-' * column3_width)
+    print "%s %s %s"%("Project Header".ljust(column1_width), "Toolkit Header".ljust(column2_width), "Toolkit Library")
+    print "%s %s %s"%('-' * column1_width, '-' * column2_width, '-' * column3_width)
+    
   for filepath in all_project_files:
     project_headers = extract_headers_directly_included(filepath)
     #print "Found %s headers in file [%s]" % (len(project_headers), filepath)
     for header in project_headers:
       if header in header_to_library_map:
         if options.extra_verbose:
-          print "[%s] found in [%s]" % (header, header_to_library_map[header])
+          print "%s %s %s" % (os.path.basename(filepath).ljust(column1_width), header.ljust(column2_width), header_to_library_map[header])
         expected_libraries.append(header_to_library_map[header])
   
+  if options.verbose:
+    print "-" * 20
+    print "Toolkit Library"
+    print "-" * 20;
   expected_libraries = sorted(list(set(expected_libraries)))
   for lib in expected_libraries:
     print lib
